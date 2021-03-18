@@ -28,6 +28,15 @@ type getPaymentStatusResponse struct {
 	BusinessID      string                 `json:"business_id,omitempty"`
 }
 
+type getLinkAjaPaymentStatusResponse struct {
+	EWalletType     xendit.EWalletTypeEnum `json:"ewallet_type"`
+	ExternalID      string                 `json:"external_id"`
+	Amount          float64                `json:"amount,string"`
+	TransactionDate *time.Time             `json:"transaction_date,omitempty"`
+	CheckoutURL     string                 `json:"checkout_url,omitempty"`
+	BusinessID      string                 `json:"business_id,omitempty"`
+}
+
 type EWalletChargeResponse struct {
 	ID                 string                     `json:"id"`
 	BusinessID         string                     `json:"business_id"`
@@ -51,6 +60,17 @@ type EWalletChargeResponse struct {
 	FailureCode        string                     `json:"failure_code"`
 	Basket             []xendit.EWalletBasketItem `json:"basket"`
 	Metadata           map[string]interface{}     `json:"metadata"`
+}
+
+func (r *getLinkAjaPaymentStatusResponse) toEwalletResponse() *xendit.EWallet {
+	return &xendit.EWallet{
+		EWalletType:     r.EWalletType,
+		ExternalID:      r.ExternalID,
+		Amount:          r.Amount,
+		TransactionDate: r.TransactionDate,
+		CheckoutURL:     r.CheckoutURL,
+		BusinessID:      r.BusinessID,
+	}
 }
 
 func (r *getPaymentStatusResponse) toEwalletResponse() *xendit.EWallet {
@@ -137,6 +157,32 @@ func (c *Client) GetPaymentStatus(data *GetPaymentStatusParams) (*xendit.EWallet
 func (c *Client) GetPaymentStatusWithContext(ctx context.Context, data *GetPaymentStatusParams) (*xendit.EWallet, *xendit.Error) {
 	if err := validator.ValidateRequired(ctx, data); err != nil {
 		return nil, validator.APIValidatorErr(err)
+	}
+
+	if data.EWalletType == xendit.EWalletTypeLINKAJA {
+		tempResponse := &getLinkAjaPaymentStatusResponse{}
+		var queryString string
+
+		if data != nil {
+			queryString = data.QueryString()
+		}
+
+		err := c.APIRequester.Call(
+			ctx,
+			"GET",
+			fmt.Sprintf("%s/ewallets?%s", c.Opt.XenditURL, queryString),
+			c.Opt.SecretKey,
+			nil,
+			nil,
+			tempResponse,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		response := tempResponse.toEwalletResponse()
+
+		return response, nil
 	}
 
 	tempResponse := &getPaymentStatusResponse{}
