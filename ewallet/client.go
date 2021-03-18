@@ -31,7 +31,7 @@ type getPaymentStatusResponse struct {
 type getLinkAjaPaymentStatusResponse struct {
 	EWalletType     xendit.EWalletTypeEnum `json:"ewallet_type"`
 	ExternalID      string                 `json:"external_id"`
-	Amount          float64                `json:"amount,string"`
+	Amount          float64                `json:"amount"`
 	TransactionDate *time.Time             `json:"transaction_date,omitempty"`
 	CheckoutURL     string                 `json:"checkout_url,omitempty"`
 	BusinessID      string                 `json:"business_id,omitempty"`
