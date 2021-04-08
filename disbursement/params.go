@@ -8,6 +8,7 @@ import (
 type CreateParams struct {
 	IdempotencyKey    string   `json:"-"`
 	ForUserID         string   `json:"-"`
+	Mock              string   `json:"Mock"`
 	ExternalID        string   `json:"external_id" validate:"required"`
 	BankCode          string   `json:"bank_code" validate:"required"`
 	AccountHolderName string   `json:"account_holder_name" validate:"required"`
@@ -29,6 +30,7 @@ type GetByIDParams struct {
 type GetByExternalIDParams struct {
 	ExternalID string `json:"external_id" validate:"required"`
 	ForUserID  string `json:"-"`
+	Mock       string `json:"Mock"`
 }
 
 // QueryString creates query string from GetByExternalIDParams, ignores nil values

@@ -33,6 +33,9 @@ func (c *Client) GetWithContext(ctx context.Context, data *GetParams) (*xendit.B
 	if data.ForUserID != "" {
 		header.Add("for-user-id", data.ForUserID)
 	}
+	if data.Mock != "" {
+		header.Add("Mock", data.Mock)
+	}
 
 	err := c.APIRequester.Call(
 		ctx,

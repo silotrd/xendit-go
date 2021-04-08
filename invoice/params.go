@@ -11,6 +11,7 @@ import (
 // CreateParams contains parameters for Create
 type CreateParams struct {
 	ForUserID                string   `json:"-"`
+	Mock                     string   `json:"Mock"`
 	ExternalID               string   `json:"external_id" validate:"required"`
 	PayerEmail               string   `json:"payer_email" validate:"required"`
 	Description              string   `json:"description" validate:"required"`
@@ -29,6 +30,7 @@ type CreateParams struct {
 // GetParams contains parameters for Get
 type GetParams struct {
 	ID string `json:"id" validate:"required"`
+	Mock string `json:"Mock"`
 }
 
 // GetAllParams contains parameters for GetAll

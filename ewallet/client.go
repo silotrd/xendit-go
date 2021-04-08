@@ -131,6 +131,9 @@ func (c *Client) CreatePaymentWithContext(ctx context.Context, data *CreatePayme
 	if data.XApiVersion != "" {
 		header.Add("X-API-VERSION", data.XApiVersion)
 	}
+	if data.Mock != "" {
+		header.Add("Mock", data.Mock)
+	}
 
 	err := c.APIRequester.Call(
 		ctx,
@@ -166,13 +169,17 @@ func (c *Client) GetPaymentStatusWithContext(ctx context.Context, data *GetPayme
 		if data != nil {
 			queryString = data.QueryString()
 		}
+		header := &http.Header{}
+		if data.Mock != "" {
+			header.Add("Mock", data.Mock)
+		}
 
 		err := c.APIRequester.Call(
 			ctx,
 			"GET",
 			fmt.Sprintf("%s/ewallets?%s", c.Opt.XenditURL, queryString),
 			c.Opt.SecretKey,
-			nil,
+			header,
 			nil,
 			tempResponse,
 		)
@@ -191,13 +198,17 @@ func (c *Client) GetPaymentStatusWithContext(ctx context.Context, data *GetPayme
 	if data != nil {
 		queryString = data.QueryString()
 	}
+	header := &http.Header{}
+	if data.Mock != "" {
+		header.Add("Mock", data.Mock)
+	}
 
 	err := c.APIRequester.Call(
 		ctx,
 		"GET",
 		fmt.Sprintf("%s/ewallets?%s", c.Opt.XenditURL, queryString),
 		c.Opt.SecretKey,
-		nil,
+		header,
 		nil,
 		tempResponse,
 	)

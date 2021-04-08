@@ -10,6 +10,7 @@ import (
 type GetParams struct {
 	ForUserID   string                        `json:"-"`
 	AccountType xendit.BalanceAccountTypeEnum `json:"account_type"`
+	Mock        string                        `json:"Mock"`
 }
 
 // QueryString creates query string from GetParams, ignores nil values

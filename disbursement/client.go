@@ -35,7 +35,9 @@ func (c *Client) CreateWithContext(ctx context.Context, data *CreateParams) (*xe
 	if data.ForUserID != "" {
 		header.Add("for-user-id", data.ForUserID)
 	}
-
+	if data.Mock != "" {
+		header.Add("Mock", data.Mock)
+	}
 	err := c.APIRequester.Call(
 		ctx,
 		"POST",
@@ -100,6 +102,9 @@ func (c *Client) GetByExternalIDWithContext(ctx context.Context, data *GetByExte
 	header := &http.Header{}
 	if data.ForUserID != "" {
 		header.Add("for-user-id", data.ForUserID)
+	}
+	if data.Mock != "" {
+		header.Add("Mock", data.Mock)
 	}
 
 	err := c.APIRequester.Call(

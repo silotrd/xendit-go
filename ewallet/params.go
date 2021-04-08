@@ -19,6 +19,7 @@ type Item struct {
 type CreatePaymentParams struct {
 	XApiVersion    string                 `json:"-"`
 	ForUserID      string                 `json:"-"`
+	Mock           string                 `json:"Mock"`
 	EWalletType    xendit.EWalletTypeEnum `json:"ewallet_type" validate:"required"`
 	ExternalID     string                 `json:"external_id" validate:"required"`
 	Amount         float64                `json:"amount" validate:"required"`
@@ -33,6 +34,7 @@ type CreatePaymentParams struct {
 type GetPaymentStatusParams struct {
 	ExternalID  string                 `json:"external_id" validate:"required"`
 	EWalletType xendit.EWalletTypeEnum `json:"ewallet_type" validate:"required"`
+	Mock        string                 `json:"Mock"`
 }
 
 // QueryString creates query string from GetPaymentStatusParams, ignores nil values

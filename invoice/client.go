@@ -32,6 +32,9 @@ func (c *Client) CreateWithContext(ctx context.Context, data *CreateParams) (*xe
 	if data.ForUserID != "" {
 		header.Add("for-user-id", data.ForUserID)
 	}
+	if data.Mock != "" {
+		header.Add("Mock", data.Mock)
+	}
 
 	err := c.APIRequester.Call(
 		ctx,
@@ -61,13 +64,17 @@ func (c *Client) GetWithContext(ctx context.Context, data *GetParams) (*xendit.I
 	}
 
 	response := &xendit.Invoice{}
+	header := &http.Header{}
+	if data.Mock != "" {
+		header.Add("Mock", data.Mock)
+	}
 
 	err := c.APIRequester.Call(
 		ctx,
 		"GET",
 		fmt.Sprintf("%s/v2/invoices/%s", c.Opt.XenditURL, data.ID),
 		c.Opt.SecretKey,
-		nil,
+		header,
 		nil,
 		response,
 	)
